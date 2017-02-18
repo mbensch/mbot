@@ -8,7 +8,8 @@ var debug = require('debug')('botkit:main');
 
 // Create the Botkit controller, which controls all instances of the bot.
 var controller = Botkit.slackbot({
-    token: process.env.SLACK_BOT_TOKEN,
+    clientId: process.env.SLACK_CLIENT_ID,
+    clientSecret: process.env.SLACK_CLIENT_SECRET,
     debug: true,
     scopes: ['bot'],
     json_file_store: __dirname + '/.db/' // store user data in a simple JSON format

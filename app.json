@@ -6,8 +6,11 @@
   "website": "https://mbensch.com/",
   "success_url":"/",
   "env": {
-      "SLACK_BOT_TOKEN": {
-          "description": "Bot token provided by slack"
+      "SLACK_CLIENT_ID": {
+          "description": "Slack App Client ID provided by slack"
+      },
+      "SLACK_CLIENT_SECRET": {
+        "description": "Slack App Client Secret provided by slack"
       }
   }
 }
