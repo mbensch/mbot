@@ -10,4 +10,4 @@ module.exports = function(controller) {
     } else {
       controller.log.info('No DASHBOT_API_KEY specified. For free turnkey analytics for your bot, go to https://www.dashbot.io/ to get your key.');
     }
-}
+};

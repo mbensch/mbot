@@ -9,5 +9,4 @@ module.exports = function(controller) {
         });
 
     });
-
-}
+};
