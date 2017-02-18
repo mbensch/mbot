@@ -1,17 +1,6 @@
-/*
-
-WHAT IS THIS?
-
-This module demonstrates simple uses of Botkit's conversation system.
-
-In this example, Botkit hears a keyword, then asks a question. Different paths
-through the conversation are chosen based on the user's response.
-
-*/
-
 module.exports = function(controller) {
 
-    controller.hears(['color'], 'direct_message,direct_mention', function(bot, message) {
+    controller.hears(['color'], ['direct_message','direct_mention'], function(bot, message) {
 
         bot.startConversation(message, function(err, convo) {
             convo.say('This is an example of using convo.ask with a single callback.');
@@ -21,7 +10,7 @@ module.exports = function(controller) {
                 convo.say('Cool, I like ' + response.text + ' too!');
                 convo.next();
 
-            });
+            })
         });
 
     });
@@ -88,5 +77,4 @@ module.exports = function(controller) {
         });
 
     });
-
 };
