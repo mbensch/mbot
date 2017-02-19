@@ -5,11 +5,14 @@ const config = {
     entry: './src/index.js',
     output: {
         filename: 'bot.js',
-        path: path.resolve(__dirname, 'bin'),
+        path: path.resolve(__dirname),
+    },
+    node: {
+        __dirname: true,
+        __filename: true,
     },
     target: 'node',
     resolve: {
-        modules: ["./node_modules"],
         alias: {
             core: path.resolve(__dirname, 'src/core'),
             skills: path.resolve(__dirname, 'src/skills'),
@@ -20,7 +23,9 @@ const config = {
         loaders: [
             {
                 test: /\.js$/,
-                exclude: /(node_modules)/,
+                include: [
+                    path.resolve(__dirname, 'src'),
+                ],
                 loader: 'babel-loader',
             }
         ],
