@@ -2,12 +2,15 @@
   "name": "marcel-slackbot-starter",
   "version": "0.0.1",
   "description": "A starter kit for building a custom slackbot",
-  "main": "bin/bot.js",
+  "main": "./bin/bot.js",
+  "engines": {
+    "node": "6.7.0"
+  },
   "scripts": {
     "build:clean": "rimraf ./bin",
-    "build:webpack": "webpack --config webpack.config.js --colors",
+    "build:webpack": "webpack --config ./webpack.config.js --colors",
     "build": "npm run build:clean && npm run build:webpack",
-    "start": "node bin/bot.js"
+    "start": "npm run build && node bin/bot.js"
   },
   "dependencies": {
     "body-parser": "^1.16.1",
