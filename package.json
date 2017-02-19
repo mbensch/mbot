@@ -10,7 +10,7 @@
     "build:clean": "rimraf ./bot.js",
     "build:webpack": "webpack --config ./webpack.config.js --colors",
     "build": "npm run build:clean && npm run build:webpack",
-    "start": "node bin/bot.js"
+    "start": "node ./bot.js"
   },
   "dependencies": {
     "body-parser": "^1.16.1",
@@ -19,7 +19,10 @@
     "debug": "^2.3.3",
     "querystring": "^0.2.0",
     "request": "^2.79.0",
-    "wordfilter": "^0.2.6"
+    "wordfilter": "^0.2.6",
+    "utf-8-validate": "^3.0.1",
+    "bufferutil": "^2.0.1",
+    "cls-bluebird": "^2.0.1"
   },
   "devDependencies": {
     "babel": "^6.23.0",
@@ -29,10 +32,7 @@
     "babel-preset-es2015": "^6.22.0",
     "babel-preset-stage-2": "^6.22.0",
     "babel-preset-stage-3": "^6.22.0",
-    "bufferutil": "^2.0.1",
-    "cls-bluebird": "^2.0.1",
     "rimraf": "^2.6.0",
-    "utf-8-validate": "^3.0.1",
     "webpack": "^2.2.1"
   },
   "keywords": [
