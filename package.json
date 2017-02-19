@@ -10,7 +10,7 @@
     "build:clean": "rimraf ./bin",
     "build:webpack": "webpack --config ./webpack.config.js --colors",
     "build": "npm run build:clean && npm run build:webpack",
-    "start": "npm run build && node bin/bot.js"
+    "start": "node bin/bot.js"
   },
   "dependencies": {
     "body-parser": "^1.16.1",
