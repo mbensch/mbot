@@ -1,35 +1,42 @@
 {
-  "name": "botkit-studio-starter",
+  "name": "marcel-slackbot-starter",
   "version": "0.0.1",
-  "description": "A starter kit for building a custom bot with Botkit Studio",
-  "main": "bot.js",
+  "description": "A starter kit for building a custom slackbot",
+  "main": "bin/bot.js",
   "scripts": {
-    "start": "node bot.js"
+    "build:clean": "rimraf ./bin",
+    "build:webpack": "webpack --config webpack.config.js --colors",
+    "build": "npm run build:clean && npm run build:webpack",
+    "start": "node bin/bot.js"
   },
   "dependencies": {
-    "body-parser": "^1.15.2",
-    "botkit": "^0.4",
-    "dashbot": "0.7.4",
+    "body-parser": "^1.16.1",
+    "botkit": "^0.5.0",
+    "dashbot": "^0.8.4",
     "debug": "^2.3.3",
-    "express": "^4.14.0",
     "querystring": "^0.2.0",
     "request": "^2.79.0",
     "wordfilter": "^0.2.6"
   },
-  "devDependencies": {},
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/howdyai/botkit-studio-starter.git"
+  "devDependencies": {
+    "babel": "^6.23.0",
+    "babel-cli": "^6.23.0",
+    "babel-core": "^6.23.1",
+    "babel-loader": "^6.3.2",
+    "babel-preset-es2015": "^6.22.0",
+    "babel-preset-stage-2": "^6.22.0",
+    "babel-preset-stage-3": "^6.22.0",
+    "bufferutil": "^2.0.1",
+    "cls-bluebird": "^2.0.1",
+    "rimraf": "^2.6.0",
+    "utf-8-validate": "^3.0.1",
+    "webpack": "^2.2.1"
   },
-  "bugs": {
-    "url": "https://github.com/howdyai/botkit-studio-starter/issues"
-  },
-  "homepage": "https://github.com/howdyai/botkit-studio-starter",
   "keywords": [
     "bots",
     "chatbots",
     "slack"
   ],
-  "author": "ben@howdy.ai",
-  "license": "ISC"
+  "author": "marcel@message.io",
+  "license": "MIT"
 }
