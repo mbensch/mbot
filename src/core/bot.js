@@ -18,11 +18,11 @@ class Bot {
         this.botToken = process.env.SLACK_BOT_TOKEN;
     }
 
-    addMiddleware = (...middleware) => {
+    addMiddleware = (middleware) => {
         this.middlewares.concat(middleware);
     };
 
-    addSkills = (...skills) => {
+    addSkills = (skills) => {
         console.log('Added Skills', skills);
         this.skills.concat(skills);
     };

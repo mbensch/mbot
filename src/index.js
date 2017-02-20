@@ -1,5 +1,5 @@
 import Bot from 'core/bot';
-import * as Skills from 'skills';
+import Skills from 'skills';
 
 const bot = new Bot();
 
