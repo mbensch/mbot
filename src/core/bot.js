@@ -36,6 +36,7 @@ class Bot {
 
         this.middlewares.forEach(middleware => middleware(this.controller));
         this.skills.forEach( skill => skill(this.controller));
+
     };
 }
 
