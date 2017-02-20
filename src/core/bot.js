@@ -15,6 +15,7 @@ class Bot {
         }
 
         this.controller = Botkit.slackbot({ debug });
+        this.controller.setupWebserver();
         this.botToken = process.env.SLACK_BOT_TOKEN;
     }
 
