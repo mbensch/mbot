@@ -1,11 +1,12 @@
 import Botkit from 'botkit';
+import each from 'lodash/each';
 
 class Bot {
 
     botToken = '';
     controller = {};
     bot = {};
-    skills = [];
+    skills = {};
     middlewares = [];
 
     constructor(debug = false, version = '0.0.1') {
@@ -23,7 +24,7 @@ class Bot {
     };
 
     addSkills = (skills) => {
-        this.skills.push(skills);
+        this.skills = { ...this.skills, ...skills };
     };
 
     run = () => {
@@ -33,7 +34,10 @@ class Bot {
             if (err) { throw new Error(err) }
         });
 
-        this.skills.forEach( skill => skill(this.controller));
+        each(this.skills, (skill, name) => {
+           console.log(`==> Adding skill ${name} to bot`);
+           skill(this.controller);
+        });
     };
 }
 
