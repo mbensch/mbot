@@ -2,38 +2,29 @@
   "name": "marcel-slackbot-starter",
   "version": "0.0.1",
   "description": "A starter kit for building a custom slackbot",
-  "main": "./bot.js",
+  "main": "./src/index.js",
   "engines": {
     "node": "6.7.0"
   },
   "scripts": {
-    "build:clean": "rimraf ./bot.js",
-    "build:webpack": "webpack --config ./webpack.config.js --colors",
+    "build:clean": "rimraf ./bin",
+    "build:webpack": "webpack --config ./webpack.config.js --colors --progress",
     "build": "npm run build:clean && npm run build:webpack",
-    "start": "node ./bot.js"
+    "start": "node ./bin/bot.js"
   },
   "dependencies": {
-    "body-parser": "^1.16.1",
-    "botkit": "^0.5.0",
-    "dashbot": "^0.8.4",
-    "debug": "^2.3.3",
-    "querystring": "^0.2.0",
-    "request": "^2.79.0",
-    "wordfilter": "^0.2.6",
-    "utf-8-validate": "^3.0.1",
-    "bufferutil": "^2.0.1",
-    "cls-bluebird": "^2.0.1"
-  },
-  "devDependencies": {
-    "babel": "^6.23.0",
-    "babel-cli": "^6.23.0",
-    "babel-core": "^6.23.1",
-    "babel-loader": "^6.3.2",
     "babel-preset-es2015": "^6.22.0",
     "babel-preset-stage-2": "^6.22.0",
     "babel-preset-stage-3": "^6.22.0",
-    "rimraf": "^2.6.0",
+    "babel-runtime": "^6.23.0",
+    "botkit": "^0.5.0",
     "webpack": "^2.2.1"
+  },
+  "devDependencies": {
+    "babel": "^6.23.0",
+    "babel-core": "^6.23.1",
+    "babel-loader": "^6.3.2",
+    "rimraf": "^2.6.0"
   },
   "keywords": [
     "bots",

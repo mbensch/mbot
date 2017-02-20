@@ -5,7 +5,7 @@ const config = {
     entry: './src/index.js',
     output: {
         filename: 'bot.js',
-        path: path.resolve(__dirname),
+        path: path.resolve(__dirname, 'bin'),
     },
     node: {
         __dirname: true,
@@ -23,9 +23,7 @@ const config = {
         loaders: [
             {
                 test: /\.js$/,
-                include: [
-                    path.resolve(__dirname, 'src'),
-                ],
+                exclude: /node_modules/,
                 loader: 'babel-loader',
             }
         ],
