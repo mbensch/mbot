@@ -1,1 +1,1 @@
-bot: node --debug ./bin/bot.js
+bot: npm start

@@ -19,12 +19,11 @@ class Bot {
     }
 
     addMiddleware = (middleware) => {
-        this.middlewares.concat(middleware);
+        this.middlewares.push(middleware);
     };
 
     addSkills = (skills) => {
-        console.log('Added Skills', skills);
-        this.skills.concat(skills);
+        this.skills.push(skills);
     };
 
     run = () => {
@@ -34,7 +33,6 @@ class Bot {
             if (err) { throw new Error(err) }
         });
 
-        console.log('Adding skills to controller', this.controller);
         this.skills.forEach( skill => skill(this.controller));
     };
 }

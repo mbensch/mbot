@@ -10,7 +10,7 @@
     "build:clean": "rimraf ./bin",
     "build:webpack": "webpack --config ./webpack.config.js --colors --progress",
     "build": "npm run build:clean && npm run build:webpack",
-    "start": "node --debug ./bin/bot.js",
+    "start": "node ./bin/bot.js",
     "heroku-postbuild": "npm run build"
   },
   "dependencies": {
