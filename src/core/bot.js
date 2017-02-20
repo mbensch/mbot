@@ -6,10 +6,11 @@ class Bot {
     botToken = '';
     controller = {};
     bot = {};
-    skills = {};
-    middlewares = [];
 
-    constructor(debug = false, version = '0.0.1') {
+    skills = {};
+    middleware = {};
+
+    constructor(debug = false) {
 
         if (!process.env.SLACK_BOT_TOKEN) {
             throw new Error('You need to provide the SLACK_BOT_TOKEN environment variable.');
@@ -20,11 +21,13 @@ class Bot {
     }
 
     addMiddleware = (middleware) => {
-        this.middlewares.push(middleware);
+        this.middleware = { ...this.middleware, ...middleware };
+        return this;
     };
 
     addSkills = (skills) => {
         this.skills = { ...this.skills, ...skills };
+        return this;
     };
 
     run = () => {
@@ -32,6 +35,11 @@ class Bot {
             token: this.botToken
         }).startRTM((err) => {
             if (err) { throw new Error(err) }
+        });
+
+        each(this.middleware, (middleware, name) => {
+            console.log(`==> Adding middleware ${name} to bot`);
+            middleware(this.controller);
         });
 
         each(this.skills, (skill, name) => {
