@@ -15,7 +15,6 @@ class Bot {
         }
 
         this.controller = Botkit.slackbot({ debug });
-        this.controller.setupWebserver();
         this.botToken = process.env.SLACK_BOT_TOKEN;
     }
 
@@ -24,6 +23,7 @@ class Bot {
     };
 
     addSkills = (...skills) => {
+        console.log('Added Skills', skills);
         this.skills.concat(skills);
     };
 

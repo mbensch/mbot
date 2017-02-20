@@ -1,4 +1,3 @@
 .idea
-.db
 node_modules
-components/routes/_*
+bin
