@@ -34,9 +34,8 @@ class Bot {
             if (err) { throw new Error(err) }
         });
 
-        this.middlewares.forEach(middleware => middleware(this.controller));
+        console.log('Adding skills to controller', this.controller);
         this.skills.forEach( skill => skill(this.controller));
-
     };
 }
 
