@@ -79,9 +79,9 @@
     envify "^3.4.0"
     lodash "^4.13.1"
 
-"@ciscospark/plugin-phone@^0.7.55":
-  version "0.7.55"
-  resolved "https://registry.yarnpkg.com/@ciscospark/plugin-phone/-/plugin-phone-0.7.55.tgz#65a7da23e78afba41c134a0562ca9dfa1fcf4ddc"
+"@ciscospark/plugin-phone@^0.7.56":
+  version "0.7.56"
+  resolved "https://registry.yarnpkg.com/@ciscospark/plugin-phone/-/plugin-phone-0.7.56.tgz#529900dd11a6f72b468b77586c543801a8c0f1f6"
   dependencies:
     "@ciscospark/common" "^0.7.52"
     "@ciscospark/plugin-locus" "^0.7.55"
@@ -328,8 +328,8 @@ async@^1.5.2:
   resolved "https://registry.yarnpkg.com/async/-/async-1.5.2.tgz#ec6a61ae56480c0c3cb241c95618e20892f9672a"
 
 async@^2.0.0-rc.5, async@^2.0.1, async@^2.1.2:
-  version "2.1.4"
-  resolved "https://registry.yarnpkg.com/async/-/async-2.1.4.tgz#2d2160c7788032e4dd6cbe2502f1f9a2c8f6cde4"
+  version "2.1.5"
+  resolved "https://registry.yarnpkg.com/async/-/async-2.1.5.tgz#e587c68580994ac67fc56ff86d3ac56bdbe810bc"
   dependencies:
     lodash "^4.14.0"
 
@@ -1225,13 +1225,13 @@ cipher-base@^1.0.0, cipher-base@^1.0.1:
     inherits "^2.0.1"
 
 ciscospark@^0.7.31:
-  version "0.7.55"
-  resolved "https://registry.yarnpkg.com/ciscospark/-/ciscospark-0.7.55.tgz#91f49468cebb3a43d0cfc1e29089923903ae0940"
+  version "0.7.56"
+  resolved "https://registry.yarnpkg.com/ciscospark/-/ciscospark-0.7.56.tgz#28889e6ba7e854d4cf0217233230aa92b84243d4"
   dependencies:
     "@ciscospark/common" "^0.7.52"
     "@ciscospark/http-core" "^0.7.53"
     "@ciscospark/plugin-logger" "^0.7.55"
-    "@ciscospark/plugin-phone" "^0.7.55"
+    "@ciscospark/plugin-phone" "^0.7.56"
     "@ciscospark/spark-core" "^0.7.55"
     "@ciscospark/storage-adapter-local-storage" "^0.7.55"
     babel-polyfill "^6.6.1"
@@ -1788,8 +1788,8 @@ fs.realpath@^1.0.0:
   resolved "https://registry.yarnpkg.com/fs.realpath/-/fs.realpath-1.0.0.tgz#1504ad2523158caa40db4a2787cb01411994ea4f"
 
 fsevents@^1.0.0:
-  version "1.0.17"
-  resolved "https://registry.yarnpkg.com/fsevents/-/fsevents-1.0.17.tgz#8537f3f12272678765b4fd6528c0f1f66f8f4558"
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/fsevents/-/fsevents-1.1.1.tgz#f19fd28f43eeaf761680e519a203c4d0b3d31aff"
   dependencies:
     nan "^2.3.0"
     node-pre-gyp "^0.6.29"
@@ -2411,13 +2411,9 @@ lodash.once@^4.0.0:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/lodash.once/-/lodash.once-4.1.1.tgz#0dd3971213c7c56df880977d504c88fb471a97ac"
 
-lodash@^4.11.1, lodash@^4.13.1, lodash@^4.14.0, lodash@^4.6.1:
+lodash@^4.11.1, lodash@^4.13.1, lodash@^4.14.0, lodash@^4.2.0, lodash@^4.6.1:
   version "4.17.4"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.4.tgz#78203a4d1c328ae1d86dca6460e369b57f4055ae"
-
-lodash@^4.2.0:
-  version "4.12.0"
-  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.12.0.tgz#2bd6dc46a040f59e686c972ed21d93dc59053258"
 
 longest@^1.0.1:
   version "1.0.1"
@@ -2952,22 +2948,11 @@ read-pkg@^1.0.0:
     isarray "0.0.1"
     string_decoder "~0.10.x"
 
-"readable-stream@^2.0.0 || ^1.1.13", readable-stream@^2.1.0:
+"readable-stream@^2.0.0 || ^1.1.13", readable-stream@^2.0.1, readable-stream@^2.0.2, readable-stream@^2.0.5, readable-stream@^2.1.0:
   version "2.2.2"
   resolved "https://registry.yarnpkg.com/readable-stream/-/readable-stream-2.2.2.tgz#a9e6fec3c7dda85f8bb1b3ba7028604556fc825e"
   dependencies:
     buffer-shims "^1.0.0"
-    core-util-is "~1.0.0"
-    inherits "~2.0.1"
-    isarray "~1.0.0"
-    process-nextick-args "~1.0.6"
-    string_decoder "~0.10.x"
-    util-deprecate "~1.0.1"
-
-readable-stream@^2.0.1, readable-stream@^2.0.2, readable-stream@^2.0.5, readable-stream@~2.0.5:
-  version "2.0.6"
-  resolved "https://registry.yarnpkg.com/readable-stream/-/readable-stream-2.0.6.tgz#8f90341e68a53ccc928788dacfcd11b36eb9b78e"
-  dependencies:
     core-util-is "~1.0.0"
     inherits "~2.0.1"
     isarray "~1.0.0"
@@ -2983,6 +2968,17 @@ readable-stream@~1.1.9:
     inherits "~2.0.1"
     isarray "0.0.1"
     string_decoder "~0.10.x"
+
+readable-stream@~2.0.5:
+  version "2.0.6"
+  resolved "https://registry.yarnpkg.com/readable-stream/-/readable-stream-2.0.6.tgz#8f90341e68a53ccc928788dacfcd11b36eb9b78e"
+  dependencies:
+    core-util-is "~1.0.0"
+    inherits "~2.0.1"
+    isarray "~1.0.0"
+    process-nextick-args "~1.0.6"
+    string_decoder "~0.10.x"
+    util-deprecate "~1.0.1"
 
 readable-stream@~2.1.4:
   version "2.1.5"
@@ -3198,8 +3194,8 @@ sdp-transform@^1.6.2:
   resolved "https://registry.yarnpkg.com/sdp-transform/-/sdp-transform-1.7.0.tgz#5baf1caefa31f4a553d192d32d03a277cb7f4083"
 
 sdp@^1.0.0:
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/sdp/-/sdp-1.2.1.tgz#ea2ab7249766b2367a681b8b5b71f1c67d6e4eba"
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/sdp/-/sdp-1.3.0.tgz#f30ff8a554886616881861a31951ab8133d30392"
 
 "semver@2 || 3 || 4 || 5", semver@~5.3.0:
   version "5.3.0"
