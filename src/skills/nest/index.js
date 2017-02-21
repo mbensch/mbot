@@ -14,7 +14,7 @@ export default (controller, environment) => {
             bot.reply(
                 message,
                 `The temperature in ${name} is ${ambient_temperature_f}\xB0F with a humidity of ${humidity}%\n` +
-                `The AC is currently ${hvac_state} and Nest is in ${hvac_mode} mode with` +
+                `The AC is currently ${hvac_state} and Nest is in ${hvac_mode} mode with ` +
                 `target temperature set to ${target_temperature_f}\xB0F.`
             );
         });
