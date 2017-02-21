@@ -11,7 +11,7 @@ var _nest2 = _interopRequireDefault(_nest);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var LISTEN = 'direct_message,direct_mention,mention';
-var UNAUTHORIZED_USER = 'Sorry, but only Marcel is allowed to tinker with his Nest!';
+var UNAUTHORIZED_USER = 'https://cdn.meme.am/cache/instances/folder467/500x/75759467.jpg';
 var LOADING_MSG = 'One second I\'m working on that :sonic:';
 
 exports.default = function (controller, environment) {
@@ -20,14 +20,15 @@ exports.default = function (controller, environment) {
 
     controller.hears(['nest info'], LISTEN, function (bot, message) {
         nestClient.getInfo().then(function (info) {
-            var name = info.stucture.name;
+            var name = info.structure.name;
             var _info$thermostat = info.thermostat,
                 ambient_temperature_f = _info$thermostat.ambient_temperature_f,
+                humidity = _info$thermostat.humidity,
                 target_temperature_f = _info$thermostat.target_temperature_f,
                 hvac_state = _info$thermostat.hvac_state,
                 hvac_mode = _info$thermostat.hvac_mode;
 
-            bot.reply(message, 'The temperature in ' + name + ' is ' + ambient_temperature_f + '\xB0F.\n\n                 The AC is currently ' + hvac_state + ' and Nest is in ' + hvac_mode + ' mode with target temperature set to ' + target_temperature_f + '\xB0F.');
+            bot.reply(message, 'The temperature in ' + name + ' is ' + ambient_temperature_f + '\xB0F with a humidity of ' + humidity + '%\n' + ('The AC is currently ' + hvac_state + ' and Nest is in ' + hvac_mode + ' mode with ') + ('target temperature set to ' + target_temperature_f + '\xB0F.'));
         });
     });
 
@@ -49,8 +50,9 @@ exports.default = function (controller, environment) {
                         target_temperature_f = info.target_temperature_f,
                         time_to_target = info.time_to_target;
 
-                    var emoticon = targetMode === 'cool' ? ':snowflake:' : ':fire:';
-                    bot.reply(message, emoticon + ' Nest is now in ' + hvac_mode + ' mode. The target temperature is set to ' + target_temperature_f + '\xB0F and will be reached in ' + time_to_target + ' hours.');
+                    bot.reply(message, 'The target temperature is set to ' + target_temperature_f + '\xB0F and will be reached in ' + time_to_target + ' hours.');
+                }).catch(function (error) {
+                    bot.reply(message, 'Damn, something went wrong. Nest told me this: ' + error);
                 });
             }
         } else {
@@ -60,20 +62,30 @@ exports.default = function (controller, environment) {
 
     controller.hears(['nest mode (.*)'], LISTEN, function (bot, message) {
         if (message.user === 'U3YUJUB3R') {
-            var _targetMode = message.match[1];
+            var targetMode = message.match[1];
             var problem = false;
 
             bot.reply(message, 'One second I\'m working on that');
 
-            if (!(_targetMode === 'cool' || _targetMode === 'heat')) {
+            if (!(targetMode === 'cool' || targetMode === 'heat' || targetMode === 'eco')) {
                 problem == true;
-                bot.reply(message, 'The target mode is invalid. Only *cool* and *heat* are supported.!');
+                bot.reply(message, 'The target mode is invalid. Only *cool*, *heat* and *eco* are supported.!');
             }
 
             if (!problem) {
-                nestClient.setMode(_targetMode).then(function (info) {
-                    var emoticon = _targetMode === 'cool' ? ':snowflake:' : ':fire:';
-                    bot.reply(message, emoticon + ' Nest is now in ' + info.hvac_mode + ' mode. The target temperature is set to ' + info.target_temperature_f + '\xB0F and will be reached in ' + info.time_to_target + ' hours.');
+                nestClient.setMode(targetMode).then(function (info) {
+                    var emoticon = '';
+
+                    switch (targetMode) {
+                        case 'cool':
+                            emoticon = ':snowflake:';break;
+                        case 'heat':
+                            emoticon = ':fire:';break;
+                        case 'eco':
+                            emoticon = ':nest-eco:';break;
+                    }
+
+                    bot.reply(message, emoticon + ' Nest is now in ' + info.hvac_mode + ' mode.');
                 });
             }
         } else {
@@ -101,9 +113,7 @@ exports.default = function (controller, environment) {
         }
     });
 
-    controller.hears(['nest get target'], 'direct_message,direct_mention,mention', function (bot, message) {
-        nestClient.getTargetTemp().then(function (temp, time) {
-            bot.reply(message, 'Your Nest is currently set to ' + temp + '&deg;F. The target temperature will be reached in ' + time);
-        });
+    controller.hears(['test denied'], LISTEN, function (bot, message) {
+        bot.reply(message, 'https://cdn.meme.am/cache/instances/folder467/500x/75759467.jpg');
     });
 };

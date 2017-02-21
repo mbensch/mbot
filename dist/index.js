@@ -26,6 +26,9 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+// Only for deployment on forge
+require('dotenv').config();
+
 var BOT_TOKEN = process.env.SLACK_BOT_TOKEN;
 var DEBUG = process.env.BOT_DEBUG || false;
 var REDIS = process.env.BOT_REDIS || false;

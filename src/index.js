@@ -1,3 +1,8 @@
+// Only for deployment on forge
+require('dotenv').config();
+
+console.log('environment', process.env);
+
 import each from 'lodash/each';
 import path from 'path';
 import Botkit from 'botkit';

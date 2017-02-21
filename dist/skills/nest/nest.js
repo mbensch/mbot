@@ -91,6 +91,9 @@ var Nest = function () {
             return this.write('devices/thermostats/' + this.thermostat.device_id, { target_temperature_f: temp }).then(function () {
                 _this4.thermostat = _extends({}, _this4.thermostat, { target_temperature_f: temp });
                 return _this4.thermostat;
+            }).catch(function (error) {
+                console.log('Error setting temperature:', error);
+                return error;
             });
         }
     }, {
@@ -119,7 +122,7 @@ var Nest = function () {
         value: function hydrateData() {
             var _this7 = this;
 
-            this.read().then(function (data) {
+            return this.read().then(function (data) {
                 _this7.structure = (0, _lodash.values)(data.structures)[0];
                 var thermostatId = (0, _lodash.values)(_this7.structure.thermostats)[0];
                 _this7.thermostat = data.devices.thermostats[thermostatId];
@@ -155,7 +158,8 @@ var Nest = function () {
             return _superagent2.default.put(NEST_API_ROOT + '/' + path).set('Content-Type', 'application/json').set('Authorization', 'Bearer ' + this.accessToken).send(data).then(function (result) {
                 return result.body;
             }).catch(function (error) {
-                console.error('Write error:', error);
+                console.dir(error);
+                return error.response.body;
             });
         }
     }]);
