@@ -10,10 +10,10 @@ export default (controller, environment) => {
     controller.hears(['nest info'], LISTEN, (bot, message) => {
         nestClient.getInfo().then((info) => {
             const { name } = info.structure;
-            const { ambient_temperature_f, target_temperature_f, hvac_state, hvac_mode } = info.thermostat;
+            const { ambient_temperature_f, humidity, target_temperature_f, hvac_state, hvac_mode } = info.thermostat;
             bot.reply(
                 message,
-                `The temperature in ${name} is ${ambient_temperature_f}\xB0F.\n` +
+                `The temperature in ${name} is ${ambient_temperature_f}\xB0F with a humidity of ${humidity}%\n` +
                 `The AC is currently ${hvac_state} and Nest is in ${hvac_mode} mode with` +
                 `target temperature set to ${target_temperature_f}\xB0F.`
             );
@@ -70,7 +70,7 @@ export default (controller, environment) => {
                         case 'eco': emoticon = ':nest-eco:'; break;
                     }
 
-                    bot.reply(message, `${emoticon} Nest is now in ${info.hvac_mode} mode. The target temperature is set to ${info.target_temperature_f}\xB0F and will be reached in ${info.time_to_target} hours.`);
+                    bot.reply(message, `${emoticon} Nest is now in ${info.hvac_mode} mode.`);
                 });
             }
         } else {
