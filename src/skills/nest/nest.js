@@ -93,12 +93,12 @@ class Nest {
 
     //=========================> HELPER
     hydrateData() {
-        this.read()
-            .then((data) => {
-                this.structure = values(data.structures)[0];
-                const thermostatId = values(this.structure.thermostats)[0];
-                this.thermostat = data.devices.thermostats[thermostatId];
-            });
+        return this.read()
+                .then((data) => {
+                    this.structure = values(data.structures)[0];
+                    const thermostatId = values(this.structure.thermostats)[0];
+                    this.thermostat = data.devices.thermostats[thermostatId];
+                });
     }
 
     getAccessToken() {
