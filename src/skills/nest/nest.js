@@ -140,7 +140,7 @@ class Nest {
                 return result.body;
             })
             .catch((error) => {
-                console.log('Write error:', error.body);
+                console.log('Write error:', error.response.body);
             });
     }
 }
