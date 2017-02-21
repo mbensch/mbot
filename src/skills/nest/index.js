@@ -33,11 +33,14 @@ export default (controller, environment) => {
             }
 
             if (!problem) {
-                nestClient.setTemp(targetTemp).then((info) => {
-                    const { hvac_mode, target_temperature_f, time_to_target } = info;
-                    const emoticon = targetMode === 'cool' ? ':snowflake:' : ':fire:';
-                    bot.reply(message, `${emoticon} Nest is now in ${hvac_mode} mode. The target temperature is set to ${target_temperature_f}\xB0F and will be reached in ${time_to_target} hours.`);
-                });
+                nestClient.setTemp(targetTemp)
+                    .then((info) => {
+                        const { hvac_mode, target_temperature_f, time_to_target } = info;
+                        bot.reply(message, `The target temperature is set to ${target_temperature_f}\xB0F and will be reached in ${time_to_target} hours.`);
+                    })
+                    .catch((error) => {
+                        bot.reply(message, `Damn, something went wrong. Nest told me this: ${error}`);
+                    });
             }
         } else {
             bot.reply(message, UNAUTHORIZED_USER);

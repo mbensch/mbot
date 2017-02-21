@@ -67,8 +67,12 @@ class Nest {
         return (
             this.write(`devices/thermostats/${this.thermostat.device_id}`, { target_temperature_f: temp })
                 .then(() => {
-                    this.thermostat = { ...this.thermostat, target_temperature_f: temp }
+                    this.thermostat = { ...this.thermostat, target_temperature_f: temp };
                     return this.thermostat;
+                })
+                .catch((error) => {
+                    console.log('Error setting temperature:', error);
+                    return error;
                 })
         );
     }
@@ -140,7 +144,7 @@ class Nest {
                 return result.body;
             })
             .catch((error) => {
-                console.log('Write error:', error.response.body);
+                return error.response.body;
             });
     }
 }
