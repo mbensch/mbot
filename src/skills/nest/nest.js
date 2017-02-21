@@ -144,6 +144,7 @@ class Nest {
                 return result.body;
             })
             .catch((error) => {
+                console.dir(error);
                 return error.response.body;
             });
     }
