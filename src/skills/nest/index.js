@@ -54,15 +54,22 @@ export default (controller, environment) => {
 
             bot.reply(message, 'One second I\'m working on that');
 
-            if (!(targetMode === 'cool' || targetMode === 'heat')) {
+            if (!(targetMode === 'cool' || targetMode === 'heat' || targetMode === 'eco')) {
                 problem == true;
-                bot.reply(message, 'The target mode is invalid. Only *cool* and *heat* are supported.!');
+                bot.reply(message, 'The target mode is invalid. Only *cool*, *heat* and *eco* are supported.!');
             }
 
 
             if (!problem) {
                 nestClient.setMode(targetMode).then((info) => {
-                    const emoticon = targetMode === 'cool' ? ':snowflake:' : ':fire:';
+                    let emoticon = '';
+
+                    switch (targetMode) {
+                        case 'cool': emoticon = ':snowflake:'; break;
+                        case 'heat': emoticon = ':fire:'; break;
+                        case 'eco': emoticon = ':nest-eco:'; break;
+                    }
+
                     bot.reply(message, `${emoticon} Nest is now in ${info.hvac_mode} mode. The target temperature is set to ${info.target_temperature_f}\xB0F and will be reached in ${info.time_to_target} hours.`);
                 });
             }
