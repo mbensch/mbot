@@ -1,6 +1,6 @@
 import Nest from './nest.js';
 const LISTEN = 'direct_message,direct_mention,mention';
-const UNAUTHORIZED_USER = 'Sorry, but only Marcel is allowed to tinker with his Nest!';
+const UNAUTHORIZED_USER = 'https://cdn.meme.am/cache/instances/folder467/500x/75759467.jpg';
 const LOADING_MSG = 'One second I\'m working on that :sonic:';
 
 export default (controller, environment) => {
