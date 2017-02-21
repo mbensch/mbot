@@ -9,7 +9,7 @@ export default (controller, environment) => {
 
     controller.hears(['nest info'], LISTEN, (bot, message) => {
         nestClient.getInfo().then((info) => {
-            const { name } = info.stucture;
+            const { name } = info.structure;
             const { ambient_temperature_f, target_temperature_f, hvac_state, hvac_mode } = info.thermostat;
             bot.reply(
                 message,
