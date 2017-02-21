@@ -98,9 +98,8 @@ export default (controller, environment) => {
         }
     });
 
-    controller.hears(['nest get target'], 'direct_message,direct_mention,mention', (bot, message) => {
-        nestClient.getTargetTemp().then((temp, time) => {
-            bot.reply(message, `Your Nest is currently set to ${temp}&deg;F. The target temperature will be reached in ${time}`);
-        });
+    controller.hears(['test denied'], LISTEN, (bot, message) => {
+       bot.reply(message, 'https://cdn.meme.am/cache/instances/folder467/500x/75759467.jpg' );
     });
+
 };
