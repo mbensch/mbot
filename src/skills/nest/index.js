@@ -13,8 +13,9 @@ export default (controller, environment) => {
             const { ambient_temperature_f, target_temperature_f, hvac_state, hvac_mode } = info.thermostat;
             bot.reply(
                 message,
-                `The temperature in ${name} is ${ambient_temperature_f}\xB0F.\n
-                 The AC is currently ${hvac_state} and Nest is in ${hvac_mode} mode with target temperature set to ${target_temperature_f}\xB0F.`
+                `The temperature in ${name} is ${ambient_temperature_f}\xB0F.\n` +
+                `The AC is currently ${hvac_state} and Nest is in ${hvac_mode} mode with` +
+                `target temperature set to ${target_temperature_f}\xB0F.`
             );
         });
     });
