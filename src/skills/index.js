@@ -1,5 +1,5 @@
-import HelloWorld from './hello_world';
-import Nest from './nest';
+import HelloWorld from './hello-world/index.js';
+import Nest from './nest/index.js';
 
 export {
     HelloWorld,
