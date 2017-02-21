@@ -1,5 +1,5 @@
 import superagent from 'superagent';
-
+import { values } from 'lodash';
 const NEST_API_ROOT = 'https://developer-api.nest.com';
 const NEST_AUTH_ROOT = 'https://api.home.nest.com/oauth2/access_token';
 
@@ -23,38 +23,83 @@ const _checkEnvironment = () => {
 class Nest {
 
     accessToken = null;
-    tempScale = 'F';
+    structure = {};
+    thermostat = {};
 
     constructor(storage, teamId) {
         _checkEnvironment();
 
         storage.teams.get(teamId, (err, data) => {
-            // If we don't have any data for that team we need to fetch the access token and store it
-            if (err) {
+            if (!data) {
                 this.getAccessToken()
-                    .then((token) => {
-                        this.accessToken = true;
-                        storage.teams.save({ id: teamId, nestAccessToken: token });
+                    .then((response) => {
+                        this.accessToken = response.access_token;
+                        storage.teams.save({ id: teamId, nestAccessToken: response.access_token });
+                        this.hydrateData();
                     });
             } else {
                 this.accessToken = data.nestAccessToken;
+                this.hydrateData();
             }
         });
     }
 
-    getTemp() {
-        return this.getData()
-            .then((data) => {
-               // Read temp
-            });
+    getInfo() {
+        return (
+            this.hydrateData()
+                .then(() => {
+                    return { thermostat: this.thermostat, structure: this.structure };
+                })
+        );
     };
 
-    getTargetTemp() {
-        return this.getData()
+    setMode(mode) {
+        return (
+            this.write(`devices/thermostats/${this.thermostat.device_id}`, { hvac_mode: mode })
+                .then(() => {
+                    this.thermostat = { ...this.thermostat, hvac_mode: mode }
+                    return this.thermostat;
+                })
+        );
+    }
+
+    setTemp(temp) {
+        return (
+            this.write(`devices/thermostats/${this.thermostat.device_id}`, { target_temperature_f: temp })
+                .then(() => {
+                    this.thermostat = { ...this.thermostat, target_temperature_f: temp }
+                    return this.thermostat;
+                })
+        );
+    }
+
+    setAway() {
+        return (
+            this.write(`structures/${this.structure.structure_id}`, { away: 'away' })
+                .then(() => {
+                    this.structure = { ...this.structure, away: 'away' };
+                })
+        );
+    }
+
+    setHome() {
+        return (
+            this.write(`structures/${this.structure.structure_id}`, { away: 'home' })
+                .then((home) => {
+                    this.structure = { ...this.structure, away: 'home' };
+                })
+        );
+    }
+
+    //=========================> HELPER
+    hydrateData() {
+        this.read()
             .then((data) => {
-                // Read temp and return it.
+                this.structure = values(data.structures)[0];
+                const thermostatId = values(this.structure.thermostats)[0];
+                this.thermostat = data.devices.thermostats[thermostatId];
             });
-    };
+    }
 
     getAccessToken() {
         return superagent
@@ -68,22 +113,37 @@ class Nest {
                 return result.body;
             })
             .catch((error) => {
-                const type = error.body.error;
-                const text = error.body.error_description;
-                throw new Error(`Couldn\'t get access token from Nest. Please check you environment variables. Error: ${type}: ${text}`);
+                throw new Error('Couldn\'t get access token from Nest. Please check you environment variables.');
             });
     }
 
-    getData() {
+    read(path = '') {
         return superagent
-            .get(`${NEST_API_ROOT}`)
+            .get(`${NEST_API_ROOT}/${path}`)
             .set('Content-Type', 'application/json')
             .set('Authorization', `Bearer ${this.accessToken}`)
             .then((result) => {
-                console.log('Received Data:', result.body);
                 return result.body;
+            })
+            .catch((error) => {
+                console.log('Error getting data:', error);
+                return false;
             });
-    };
+    }
+
+    write(path = '', data) {
+        return superagent
+            .put(`${NEST_API_ROOT}/${path}`)
+            .set('Content-Type', 'application/json')
+            .set('Authorization', `Bearer ${this.accessToken}`)
+            .send(data)
+            .then((result) => {
+                return result.body;
+            })
+            .catch((error) => {
+                console.error('Write error:', error);
+            });
+    }
 }
 
 export default Nest;

@@ -4,11 +4,15 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _superagent = require('superagent');
 
 var _superagent2 = _interopRequireDefault(_superagent);
+
+var _lodash = require('lodash');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -41,35 +45,84 @@ var Nest = function () {
         _classCallCheck(this, Nest);
 
         this.accessToken = null;
-        this.tempScale = 'F';
+        this.structure = {};
+        this.thermostat = {};
 
         _checkEnvironment();
 
         storage.teams.get(teamId, function (err, data) {
-            // If we don't have any data for that team we need to fetch the access token and store it
-            if (err) {
-                _this.getAccessToken().then(function (token) {
-                    _this.accessToken = true;
-                    storage.teams.save({ id: teamId, nestAccessToken: token });
+            if (!data) {
+                _this.getAccessToken().then(function (response) {
+                    _this.accessToken = response.access_token;
+                    storage.teams.save({ id: teamId, nestAccessToken: response.access_token });
+                    _this.hydrateData();
                 });
             } else {
                 _this.accessToken = data.nestAccessToken;
+                _this.hydrateData();
             }
         });
     }
 
     _createClass(Nest, [{
-        key: 'getTemp',
-        value: function getTemp() {
-            return this.getData().then(function (data) {
-                // Read temp
+        key: 'getInfo',
+        value: function getInfo() {
+            var _this2 = this;
+
+            return this.hydrateData().then(function () {
+                return { thermostat: _this2.thermostat, structure: _this2.structure };
             });
         }
     }, {
-        key: 'getTargetTemp',
-        value: function getTargetTemp() {
-            return this.getData().then(function (data) {
-                // Read temp and return it.
+        key: 'setMode',
+        value: function setMode(mode) {
+            var _this3 = this;
+
+            return this.write('devices/thermostats/' + this.thermostat.device_id, { hvac_mode: mode }).then(function () {
+                _this3.thermostat = _extends({}, _this3.thermostat, { hvac_mode: mode });
+                return _this3.thermostat;
+            });
+        }
+    }, {
+        key: 'setTemp',
+        value: function setTemp(temp) {
+            var _this4 = this;
+
+            return this.write('devices/thermostats/' + this.thermostat.device_id, { target_temperature_f: temp }).then(function () {
+                _this4.thermostat = _extends({}, _this4.thermostat, { target_temperature_f: temp });
+                return _this4.thermostat;
+            });
+        }
+    }, {
+        key: 'setAway',
+        value: function setAway() {
+            var _this5 = this;
+
+            return this.write('structures/' + this.structure.structure_id, { away: 'away' }).then(function () {
+                _this5.structure = _extends({}, _this5.structure, { away: 'away' });
+            });
+        }
+    }, {
+        key: 'setHome',
+        value: function setHome() {
+            var _this6 = this;
+
+            return this.write('structures/' + this.structure.structure_id, { away: 'home' }).then(function (home) {
+                _this6.structure = _extends({}, _this6.structure, { away: 'home' });
+            });
+        }
+
+        //=========================> HELPER
+
+    }, {
+        key: 'hydrateData',
+        value: function hydrateData() {
+            var _this7 = this;
+
+            this.read().then(function (data) {
+                _this7.structure = (0, _lodash.values)(data.structures)[0];
+                var thermostatId = (0, _lodash.values)(_this7.structure.thermostats)[0];
+                _this7.thermostat = data.devices.thermostats[thermostatId];
             });
         }
     }, {
@@ -78,17 +131,31 @@ var Nest = function () {
             return _superagent2.default.post(NEST_AUTH_ROOT).type('form').send({ code: process.env.NEST_PIN }).send({ client_id: process.env.NEST_PRODUCT_ID }).send({ client_secret: process.env.NEST_PRODUCT_SECRET }).send({ grant_type: 'authorization_code' }).then(function (result) {
                 return result.body;
             }).catch(function (error) {
-                var type = error.body.error;
-                var text = error.body.error_description;
-                throw new Error('Couldn\'t get access token from Nest. Please check you environment variables. Error: ' + type + ': ' + text);
+                throw new Error('Couldn\'t get access token from Nest. Please check you environment variables.');
             });
         }
     }, {
-        key: 'getData',
-        value: function getData() {
-            return _superagent2.default.get('' + NEST_API_ROOT).set('Content-Type', 'application/json').set('Authorization', 'Bearer ' + this.accessToken).then(function (result) {
-                console.log('Received Data:', result.body);
+        key: 'read',
+        value: function read() {
+            var path = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+
+            return _superagent2.default.get(NEST_API_ROOT + '/' + path).set('Content-Type', 'application/json').set('Authorization', 'Bearer ' + this.accessToken).then(function (result) {
                 return result.body;
+            }).catch(function (error) {
+                console.log('Error getting data:', error);
+                return false;
+            });
+        }
+    }, {
+        key: 'write',
+        value: function write() {
+            var path = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+            var data = arguments[1];
+
+            return _superagent2.default.put(NEST_API_ROOT + '/' + path).set('Content-Type', 'application/json').set('Authorization', 'Bearer ' + this.accessToken).send(data).then(function (result) {
+                return result.body;
+            }).catch(function (error) {
+                console.error('Write error:', error);
             });
         }
     }]);
