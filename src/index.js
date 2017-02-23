@@ -16,10 +16,6 @@ const REDIS = process.env.BOT_REDIS || false;
 // Set globals for testing
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
-if (process.env.SLACK_API_URL) {
-    global.api_url = process.env.SLACK_API_URL
-};
-
 // We need the bot token, otherwise we can exit right away;
 if (!BOT_TOKEN) {
     throw new Error('You need to provide the SLACK_BOT_TOKEN environment variable.');
@@ -44,6 +40,7 @@ if (REDIS) {
 const controller = Botkit.slackbot({
     debug: DEBUG,
     ...storageOptions,
+    api_root: process.env.SLACK_API_URL,
 });
 
 //=====> Environment
