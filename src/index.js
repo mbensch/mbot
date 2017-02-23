@@ -13,6 +13,13 @@ const BOT_TOKEN = process.env.SLACK_BOT_TOKEN;
 const DEBUG = process.env.BOT_DEBUG || false;
 const REDIS = process.env.BOT_REDIS || false;
 
+// Set globals for testing
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+
+if (process.env.SLACK_API_URL) {
+    global.api_url = process.env.SLACK_API_URL
+};
+
 // We need the bot token, otherwise we can exit right away;
 if (!BOT_TOKEN) {
     throw new Error('You need to provide the SLACK_BOT_TOKEN environment variable.');
