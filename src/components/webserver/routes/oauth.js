@@ -1,5 +1,3 @@
-const LOG = () => console.log.apply(arguments);
-
 class OAuthHandler {
 
     controller = null;
@@ -25,14 +23,14 @@ class OAuthHandler {
 
         slackApi.api.oauth.access(options, (err, auth) => {
             if (err) {
-                LOG('Error confirming oauth', err);
+                console.log('Error confirming oauth', err);
                 return response.redirect('/login_error.html');
             }
 
             slackApi.api.auth.test({ token: auth.access_token}, (err, identity) => {
 
                 if (err) {
-                    LOG('Error retrieving user identity', err);
+                    console.log('Error retrieving user identity', err);
                     return response.redirect('/login_error.html');
                 }
 
