@@ -46,7 +46,7 @@ const controller = Botkit.slackbot({
     clientSecret: CLIENT_SECRET,
     scopes: ['bot'],
     ...storageOptions,
-    api_root: process.env.API_URL,
+    api_root: API_URL,
 });
 
 controller.startTicking();
