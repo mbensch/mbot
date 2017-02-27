@@ -24,8 +24,6 @@ class OAuthHandler {
             code,
         };
 
-        console.log('slackApi', slackApi);
-
         slackApi.api.oauth.access(options, (err, auth) => {
             if (err) {
                 console.log('Error confirming oauth', err);
@@ -38,6 +36,9 @@ class OAuthHandler {
                     console.log('Error retrieving user identity', err);
                     return response.redirect('/login_error.html');
                 }
+
+                console.log('auth', auth);
+                console.log('identity', identity);
 
                 auth.identity = identity;
                 this.controller.trigger('oauth:success', [auth]);
