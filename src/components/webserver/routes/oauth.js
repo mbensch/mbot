@@ -16,7 +16,7 @@ class OAuthHandler {
 
     oauth = (request, response) => {
         const code = request.query.code;
-        const state = reques.query.state;
+        const state = request.query.state;
 
         const slackApi = this.controller.spawn({});
 
