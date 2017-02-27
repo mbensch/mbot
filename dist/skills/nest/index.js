@@ -14,9 +14,9 @@ var LISTEN = 'direct_message,direct_mention,mention';
 var UNAUTHORIZED_USER = 'https://cdn.meme.am/cache/instances/folder467/500x/75759467.jpg';
 var LOADING_MSG = 'One second I\'m working on that :sonic:';
 
-exports.default = function (controller, environment) {
+exports.default = function (controller) {
 
-    var nestClient = new _nest2.default(controller.storage, environment.team.id);
+    var nestClient = new _nest2.default();
 
     controller.hears(['nest info'], LISTEN, function (bot, message) {
         nestClient.getInfo().then(function (info) {

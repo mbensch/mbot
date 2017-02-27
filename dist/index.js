@@ -68,7 +68,8 @@ if (REDIS) {
 var controller = _botkit2.default.slackbot(_extends({
     debug: DEBUG,
     client_id: CLIENT_ID,
-    client_secret: CLIENT_SECRET
+    client_secret: CLIENT_SECRET,
+    scopes: ['bot']
 }, storageOptions, {
     api_root: process.env.API_URL
 }));
@@ -90,5 +91,5 @@ controller.startTicking();
 //=====> Add Skills
 (0, _each2.default)(Skills, function (skill, name) {
     console.log('==> Adding skill ' + name);
-    skill(controller, environment);
+    skill(controller);
 });

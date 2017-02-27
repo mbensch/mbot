@@ -4,11 +4,9 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
 exports.default = function (webserver, controller) {
 
-    var handler = new OAUthHandler(controller);
+    var handler = new OAuthHandler(controller);
     // Create a /login link
     // This link will send user's off to Slack to authorize the app
     webserver.get('/login', handler.login);
@@ -32,61 +30,53 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 var LOG = (0, _debug2.default)('OAuth');
 
-var OAUthHandler = function () {
-    function OAUthHandler(controller) {
-        _classCallCheck(this, OAUthHandler);
+var OAuthHandler = function OAuthHandler(controller) {
+    var _this = this;
 
-        this.controller = null;
+    _classCallCheck(this, OAuthHandler);
 
-        this.controller = controller;
-    }
+    this.controller = null;
 
-    _createClass(OAUthHandler, [{
-        key: 'login',
-        value: function login(request, response) {
-            response.redirect(this.controller.getAuthorizeURL());
-        }
-    }, {
-        key: 'oauth',
-        value: function oauth(request, response) {
-            var _this = this;
+    this.login = function (request, response) {
+        response.redirect(_this.controller.getAuthorizeURL());
+    };
 
-            var code = request.query.code;
-            var state = reques.query.state;
+    this.oauth = function (request, response) {
+        var code = request.query.code;
+        var state = reques.query.state;
 
-            var slackApi = this.controller.spawn({});
+        var slackApi = _this.controller.spawn({});
 
-            var options = {
-                client_id: this.controller.config.client_id,
-                client_secret: this.controller.config.client_secret,
-                code: code
-            };
+        var options = {
+            client_id: _this.controller.config.client_id,
+            client_secret: _this.controller.config.client_secret,
+            code: code
+        };
 
-            slackApi.api.oauth.access(options, function (err, auth) {
+        slackApi.api.oauth.access(options, function (err, auth) {
+            if (err) {
+                LOG('Error confirming oauth', err);
+                return response.redirect('/login_error.html');
+            }
+
+            var scopes = auth.scope.split(/\,/);
+
+            slackApi.api.auth.test({ token: auth.access_token }, function (err, identity) {
+
                 if (err) {
-                    LOG('Error confirming oauth', err);
+                    LOG('Error retrieving user identity', err);
                     return response.redirect('/login_error.html');
                 }
 
-                var scopes = auth.scope.split(/\,/);
+                auth.identity = identity;
+                _this.controller.trigger('oauth:success', [auth]);
 
-                slackApi.api.auth.test({ token: auth.access_token }, function (err, identity) {
-
-                    if (err) {
-                        LOG('Error retrieving user identity', err);
-                        return response.redirect('/login_error.html');
-                    }
-
-                    auth.identity = identity;
-                    _this.controller.trigger('oauth:success', [auth]);
-
-                    response.cookie('team_id', auth.team_id);
-                    response.cookie('bot_user_id', auth.bot.bot_user_id);
-                    response.redirect('/login_success.html');
-                });
+                response.cookie('team_id', auth.team_id);
+                response.cookie('bot_user_id', auth.bot.bot_user_id);
+                response.redirect('/login_success.html');
             });
-        }
-    }]);
+        });
+    };
 
-    return OAUthHandler;
-}();
+    this.controller = controller;
+};
