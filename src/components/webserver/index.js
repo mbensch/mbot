@@ -15,7 +15,7 @@ export default function(controller) {
 
 
     webserver.listen(process.env.PORT || 3000, null, function() {
-        console.log('Express webserver configured and listening at http://localhost:' + process.env.PORT || 3000);
+        console.log('Express webserver configured and listening at http://localhost:3000');
     });
 
     each(routes, route => route(webserver, controller));
