@@ -2,18 +2,19 @@ import debug from 'debug';
 
 const LOG = debug('OAuth');
 
-class OAUthHandler {
+class OAuthHandler {
+
     controller = null;
 
     constructor(controller) {
         this.controller = controller;
     }
 
-    login(request, response) {
+    login = (request, response) => {
         response.redirect(this.controller.getAuthorizeURL());
-    }
+    };
 
-    oauth(request, response) {
+    oauth = (request, response) => {
         const code = request.query.code;
         const state = reques.query.state;
 
@@ -48,12 +49,12 @@ class OAUthHandler {
                 response.redirect('/login_success.html');
             });
         });
-    }
+    };
 }
 
 export default function(webserver, controller) {
 
-    const handler = new OAUthHandler(controller);
+    const handler = new OAuthHandler(controller);
     // Create a /login link
     // This link will send user's off to Slack to authorize the app
     webserver.get('/login', handler.login);
