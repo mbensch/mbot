@@ -44,6 +44,7 @@ const controller = Botkit.slackbot({
     debug: DEBUG,
     client_id: CLIENT_ID,
     client_secret: CLIENT_SECRET,
+    scopes: ['bot'],
     ...storageOptions,
     api_root: process.env.API_URL,
 });
