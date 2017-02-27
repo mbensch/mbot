@@ -16,8 +16,8 @@ class OAuthHandler {
         const slackApi = this.controller.spawn({});
 
         const options = {
-            client_id: this.controller.config.client_id,
-            client_secret: this.controller.config.client_secret,
+            client_id: this.controller.config.clientId,
+            client_secret: this.controller.config.clientSecret,
             code,
         };
 
