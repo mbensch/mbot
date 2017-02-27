@@ -65,5 +65,5 @@ each(Components, (component, name) => {
 //=====> Add Skills
 each(Skills, (skill, name) => {
     console.log(`==> Adding skill ${name}`);
-    skill(controller, environment);
+    skill(controller);
 });
