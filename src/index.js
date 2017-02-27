@@ -8,8 +8,11 @@ import path from 'path';
 import Botkit from 'botkit';
 import RedisStorage from 'botkit-storage-redis';
 import * as Skills from './skills/index.js';
+import * as Components from './components/index';
 
-const BOT_TOKEN = process.env.SLACK_BOT_TOKEN;
+const CLIENT_ID = process.env.SLACK_CLIENT_ID;
+const CLIENT_SECRET = process.env.SLACK_CLIENT_SECRET;
+const API_URL = process.env.SLACK_API_URL || 'https://slack.com';
 const DEBUG = process.env.BOT_DEBUG || false;
 const REDIS = process.env.BOT_REDIS || false;
 
@@ -17,8 +20,8 @@ const REDIS = process.env.BOT_REDIS || false;
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
 // We need the bot token, otherwise we can exit right away;
-if (!BOT_TOKEN) {
-    throw new Error('You need to provide the SLACK_BOT_TOKEN environment variable.');
+if (!CLIENT_ID || !CLIENT_SECRET) {
+    throw new Error('You need to provide the SLACK_CLIENT_ID and SLACK_CLIENT_SECRET environment variable.');
     exit(1);
 }
 
@@ -33,31 +36,24 @@ if (REDIS) {
 
     storageOptions.storage = RedisStorage({ url: process.env.REDIS_URL });
 } else {
-    storageOptions.json_file_store = path.resolve(__dirname, '../.db');
+    storageOptions.json_file_store = path.resolve(__dirname, '../.db/');
 }
 
 //=====> Initialize controller
 const controller = Botkit.slackbot({
     debug: DEBUG,
+    client_id: CLIENT_ID,
+    client_secret: CLIENT_SECRET,
     ...storageOptions,
-    api_root: process.env.SLACK_API_URL,
+    api_root: process.env.API_URL,
 });
 
-//=====> Environment
-let environment = {};
+controller.startTicking();
 
-//=====> Spawn bot
-controller.spawn({
-    token: BOT_TOKEN
-}).startRTM((err, bot, payload) => {
-    if (err) { throw new Error(err) }
-    environment = payload;
-
-    //=====> Add skills
-    each(Skills, (skill, name) => {
-        console.log(`==> Adding skill ${name} to bot`);
-        skill(controller, environment);
-    });
+//=====> Add Components
+each(Components, (component, name) => {
+    console.log(`==> Adding component ${name}`);
+    component(controller);
 });
 
 //=====> Add middleware
@@ -65,3 +61,9 @@ controller.spawn({
 //     console.log(`==> Adding middleware ${name} to bot`);
 //     middleware(this.controller);
 // });
+
+//=====> Add Skills
+each(Skills, (skill, name) => {
+    console.log(`==> Adding skill ${name}`);
+    skill(controller, environment);
+});

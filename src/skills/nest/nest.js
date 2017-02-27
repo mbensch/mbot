@@ -16,7 +16,7 @@ class Nest {
     structure = {};
     thermostat = {};
 
-    constructor(storage, teamId) {
+    constructor() {
         _checkEnvironment();
         this.accessToken = process.env.NEST_ACCESS_TOKEN;
         this.hydrateData();
