@@ -13,6 +13,8 @@ export default function(controller) {
     webserver.use(bodyParser.urlencoded({ extended: true }));
     webserver.use(express.static('dist/public'));
 
+    LOG('__dirname', __dirname);
+
     webserver.listen(process.env.PORT || 3000, null, function() {
         LOG('Express webserver configured and listening at http://localhost:' + process.env.PORT || 3000);
     });
