@@ -24,6 +24,8 @@ class OAuthHandler {
             code,
         };
 
+        console.log('slackApi', slackApi);
+
         slackApi.api.oauth.access(options, (err, auth) => {
             if (err) {
                 console.log('Error confirming oauth', err);
