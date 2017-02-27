@@ -1,6 +1,4 @@
-import debug from 'debug';
-
-const LOG = debug('OAuth');
+const LOG = () => console.log.apply(arguments);
 
 class OAuthHandler {
 
@@ -16,7 +14,6 @@ class OAuthHandler {
 
     oauth = (request, response) => {
         const code = request.query.code;
-        const state = request.query.state;
 
         const slackApi = this.controller.spawn({});
 
@@ -31,8 +28,6 @@ class OAuthHandler {
                 LOG('Error confirming oauth', err);
                 return response.redirect('/login_error.html');
             }
-
-            const scopes = auth.scope.split(/\,/);
 
             slackApi.api.auth.test({ token: auth.access_token}, (err, identity) => {
 
