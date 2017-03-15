@@ -12,7 +12,7 @@ class OAuthHandler {
 
     oauth = (request, response) => {
 
-        // console.log('Incoming Request', request);
+        console.log('Incoming Request', request);
 
         const code = request.query.code;
 
