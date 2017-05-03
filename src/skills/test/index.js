@@ -3,4 +3,9 @@ export default (controller) => {
         console.log('Received message', message);
         bot.reply(message, "Test success.");
     });
+
+    controller.hears(['debug'], 'direct_message', (bot, message) => {
+        console.log('Received message', message);
+        bot.reply(message, JSON.stringify(message));
+    })
 };

@@ -20,15 +20,7 @@ exports.default = function (webserver, controller) {
     return handler;
 };
 
-var _debug = require('debug');
-
-var _debug2 = _interopRequireDefault(_debug);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var LOG = (0, _debug2.default)('OAuth');
 
 var OAuthHandler = function OAuthHandler(controller) {
     var _this = this;
@@ -42,31 +34,34 @@ var OAuthHandler = function OAuthHandler(controller) {
     };
 
     this.oauth = function (request, response) {
+
+        console.log('Incoming Request', request);
+
         var code = request.query.code;
-        var state = reques.query.state;
 
         var slackApi = _this.controller.spawn({});
 
         var options = {
-            client_id: _this.controller.config.client_id,
-            client_secret: _this.controller.config.client_secret,
+            client_id: _this.controller.config.clientId,
+            client_secret: _this.controller.config.clientSecret,
             code: code
         };
 
         slackApi.api.oauth.access(options, function (err, auth) {
             if (err) {
-                LOG('Error confirming oauth', err);
+                console.log('Error confirming oauth', err);
                 return response.redirect('/login_error.html');
             }
-
-            var scopes = auth.scope.split(/\,/);
 
             slackApi.api.auth.test({ token: auth.access_token }, function (err, identity) {
 
                 if (err) {
-                    LOG('Error retrieving user identity', err);
+                    console.log('Error retrieving user identity', err);
                     return response.redirect('/login_error.html');
                 }
+
+                console.log('auth', auth);
+                console.log('identity', identity);
 
                 auth.identity = identity;
                 _this.controller.trigger('oauth:success', [auth]);
