@@ -22,26 +22,14 @@ var NEST_API_ROOT = 'https://developer-api.nest.com';
 var NEST_AUTH_ROOT = 'https://api.home.nest.com/oauth2/access_token';
 
 var _checkEnvironment = function _checkEnvironment() {
-    if (!process.env.NEST_PIN) {
-        throw new Error('You need to provide the NEST_PIN environment variable.');
-        exit(1);
-    }
-
-    if (!process.env.NEST_PRODUCT_ID) {
-        throw new Error('You need to provide the NEST_PRODUCT_ID environment variable.');
-        exit(1);
-    }
-
-    if (!process.env.NEST_PRODUCT_SECRET) {
-        throw new Error('You need to provide the NEST_PRODUCT_SECRET environment variable.');
+    if (!process.env.NEST_ACCESS_TOKEN) {
+        throw new Error('You need to provide the NEST_ACCESS_TOKEN environment variable.');
         exit(1);
     }
 };
 
 var Nest = function () {
-    function Nest(storage, teamId) {
-        var _this = this;
-
+    function Nest() {
         _classCallCheck(this, Nest);
 
         this.accessToken = null;
@@ -49,66 +37,58 @@ var Nest = function () {
         this.thermostat = {};
 
         _checkEnvironment();
-
-        storage.teams.get(teamId, function (err, data) {
-            if (!data) {
-                _this.getAccessToken().then(function (response) {
-                    _this.accessToken = response.access_token;
-                    storage.teams.save({ id: teamId, nestAccessToken: response.access_token });
-                    _this.hydrateData();
-                });
-            } else {
-                _this.accessToken = data.nestAccessToken;
-                _this.hydrateData();
-            }
-        });
+        this.accessToken = process.env.NEST_ACCESS_TOKEN;
+        this.hydrateData();
     }
 
     _createClass(Nest, [{
         key: 'getInfo',
         value: function getInfo() {
-            var _this2 = this;
+            var _this = this;
 
             return this.hydrateData().then(function () {
-                return { thermostat: _this2.thermostat, structure: _this2.structure };
+                return { thermostat: _this.thermostat, structure: _this.structure };
             });
         }
     }, {
         key: 'setMode',
         value: function setMode(mode) {
-            var _this3 = this;
+            var _this2 = this;
 
             return this.write('devices/thermostats/' + this.thermostat.device_id, { hvac_mode: mode }).then(function () {
-                _this3.thermostat = _extends({}, _this3.thermostat, { hvac_mode: mode });
-                return _this3.thermostat;
+                _this2.thermostat = _extends({}, _this2.thermostat, { hvac_mode: mode });
+                return _this2.thermostat;
             });
         }
     }, {
         key: 'setTemp',
         value: function setTemp(temp) {
-            var _this4 = this;
+            var _this3 = this;
 
             return this.write('devices/thermostats/' + this.thermostat.device_id, { target_temperature_f: temp }).then(function () {
-                _this4.thermostat = _extends({}, _this4.thermostat, { target_temperature_f: temp });
-                return _this4.thermostat;
+                _this3.thermostat = _extends({}, _this3.thermostat, { target_temperature_f: temp });
+                return _this3.thermostat;
+            }).catch(function (error) {
+                console.log('Error setting temperature:', error);
+                return error;
             });
         }
     }, {
         key: 'setAway',
         value: function setAway() {
-            var _this5 = this;
+            var _this4 = this;
 
             return this.write('structures/' + this.structure.structure_id, { away: 'away' }).then(function () {
-                _this5.structure = _extends({}, _this5.structure, { away: 'away' });
+                _this4.structure = _extends({}, _this4.structure, { away: 'away' });
             });
         }
     }, {
         key: 'setHome',
         value: function setHome() {
-            var _this6 = this;
+            var _this5 = this;
 
             return this.write('structures/' + this.structure.structure_id, { away: 'home' }).then(function (home) {
-                _this6.structure = _extends({}, _this6.structure, { away: 'home' });
+                _this5.structure = _extends({}, _this5.structure, { away: 'home' });
             });
         }
 
@@ -117,12 +97,12 @@ var Nest = function () {
     }, {
         key: 'hydrateData',
         value: function hydrateData() {
-            var _this7 = this;
+            var _this6 = this;
 
-            this.read().then(function (data) {
-                _this7.structure = (0, _lodash.values)(data.structures)[0];
-                var thermostatId = (0, _lodash.values)(_this7.structure.thermostats)[0];
-                _this7.thermostat = data.devices.thermostats[thermostatId];
+            return this.read().then(function (data) {
+                _this6.structure = (0, _lodash.values)(data.structures)[0];
+                var thermostatId = (0, _lodash.values)(_this6.structure.thermostats)[0];
+                _this6.thermostat = data.devices.thermostats[thermostatId];
             });
         }
     }, {
@@ -155,7 +135,8 @@ var Nest = function () {
             return _superagent2.default.put(NEST_API_ROOT + '/' + path).set('Content-Type', 'application/json').set('Authorization', 'Bearer ' + this.accessToken).send(data).then(function (result) {
                 return result.body;
             }).catch(function (error) {
-                console.error('Write error:', error);
+                console.dir(error);
+                return error.response.body;
             });
         }
     }]);

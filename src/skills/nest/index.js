@@ -3,9 +3,9 @@ const LISTEN = 'direct_message,direct_mention,mention';
 const UNAUTHORIZED_USER = 'https://cdn.meme.am/cache/instances/folder467/500x/75759467.jpg';
 const LOADING_MSG = 'One second I\'m working on that :sonic:';
 
-export default (controller, environment) => {
+export default (controller) => {
 
-    const nestClient = new Nest(controller.storage, environment.team.id);
+    const nestClient = new Nest();
 
     controller.hears(['nest info'], LISTEN, (bot, message) => {
         nestClient.getInfo().then((info) => {

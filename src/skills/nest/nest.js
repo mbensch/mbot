@@ -4,18 +4,8 @@ const NEST_API_ROOT = 'https://developer-api.nest.com';
 const NEST_AUTH_ROOT = 'https://api.home.nest.com/oauth2/access_token';
 
 const _checkEnvironment = () => {
-    if (!process.env.NEST_PIN) {
-        throw new Error('You need to provide the NEST_PIN environment variable.');
-        exit(1);
-    }
-
-    if (!process.env.NEST_PRODUCT_ID) {
-        throw new Error('You need to provide the NEST_PRODUCT_ID environment variable.');
-        exit(1);
-    }
-
-    if (!process.env.NEST_PRODUCT_SECRET) {
-        throw new Error('You need to provide the NEST_PRODUCT_SECRET environment variable.');
+    if (!process.env.NEST_ACCESS_TOKEN) {
+        throw new Error('You need to provide the NEST_ACCESS_TOKEN environment variable.');
         exit(1);
     }
 };
@@ -26,22 +16,10 @@ class Nest {
     structure = {};
     thermostat = {};
 
-    constructor(storage, teamId) {
+    constructor() {
         _checkEnvironment();
-
-        storage.teams.get(teamId, (err, data) => {
-            if (!data) {
-                this.getAccessToken()
-                    .then((response) => {
-                        this.accessToken = response.access_token;
-                        storage.teams.save({ id: teamId, nestAccessToken: response.access_token });
-                        this.hydrateData();
-                    });
-            } else {
-                this.accessToken = data.nestAccessToken;
-                this.hydrateData();
-            }
-        });
+        this.accessToken = process.env.NEST_ACCESS_TOKEN;
+        this.hydrateData();
     }
 
     getInfo() {
